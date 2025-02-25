@@ -1,0 +1,77 @@
+#define leftIR 36  
+#define rightIR 39 
+
+#define in1 18
+#define in2 19
+#define in3 21
+#define in4 22
+#define ena 4 
+#define enb 5  
+
+void setup() {
+    pinMode(leftIR, INPUT);
+    pinMode(rightIR, INPUT);
+    
+    pinMode(in1, OUTPUT);
+    pinMode(in2, OUTPUT);
+    pinMode(in3, OUTPUT);
+    pinMode(in4, OUTPUT);
+    pinMode(ena, OUTPUT);
+    pinMode(enb, OUTPUT);
+
+    analogWrite(ena, 110); 
+    analogWrite(enb, 110); 
+}
+
+void loop() {
+    int leftState = digitalRead(leftIR);
+    int rightState = digitalRead(rightIR);
+
+    if (leftState == 0 && rightState == 0) {
+        forward(110); 
+    } else if (leftState == 1 && rightState == 0) {
+        turnRight(110); 
+    } else if (leftState == 0 && rightState == 1) {
+        turnLeft(110); 
+    } else {
+        stopMotors(); 
+    }
+
+    delay(100);
+}
+
+void forward(int speed) {
+    analogWrite(ena, speed);
+    analogWrite(enb, speed);
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+}
+
+void turnRight(int speed) {
+    analogWrite(ena, speed);
+    analogWrite(enb, 0);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, LOW);
+}
+
+void turnLeft(int speed) {
+    analogWrite(ena, 0); 
+    analogWrite(enb, speed);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, HIGH);
+}
+
+void stopMotors() {
+    analogWrite(ena, 0);
+    analogWrite(enb, 0);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, LOW);
+}
